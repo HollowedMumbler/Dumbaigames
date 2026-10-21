@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://b5ayhm2qmcar1"]
+
+[ext_resource type="Texture2D" uid="uid://crtuo3w3ahdmw" path="res://images-5-removebg-preview.png" id="1_6taap"]
+[ext_resource type="Texture2D" uid="uid://b54srx8kb3246" path="res://icon.svg" id="1_m4ecr"]
+
+[sub_resource type="GDScript" id="GDScript_11bkg"]
+script/source = "extends CharacterBody2D
+
+
+const SPEED = 300.0
+const JUMP_VELOCITY = -400.0
+
+
+func _physics_process(delta: float) -> void:
+	# Add the gravity.
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+
+	# Handle jump.
+	if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+
+	# Get the input direction and handle the movement/deceleration.
+	# As good practice, you should replace UI actions with custom gameplay actions.
+	var direction := Input.get_axis(\"ui_left\", \"ui_right\")
+	if direction:
+		velocity.x = direction * SPEED
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+
+	move_and_slide()
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qw12k"]
+size = Vector2(130, 130)
+
+[node name="Node2D" type="Node2D" unique_id=924806367]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1717940352]
+position = Vector2(47, 196)
+
+[node name="CollisionShape2D" type="Polygon2D" parent="StaticBody2D" unique_id=54562823]
+position = Vector2(275, 279.5)
+polygon = PackedVector2Array(-280, -241.5, -293, -231.5, -296, -214.5, -299, -200.5, -299, -180.5, -299, -162.5, -292, -136.5, -282, -93.5, -309, -49.5, -341, -12.5, -359, 16.5, -360, 60.5, -326, 115.5, -326, 115.5, -322, 178.5, -280, 263.5, -280, 263.5, -280, 263.5, -263, 291.5, -265, 393.5, -303, 448.5, -301, 462.5, -187, 461.5, 447, 461.5, 447, 442.5, 410, 275.5, 404, 268.5, 397, 260.5, 404, 136.5, 408, 86.5, 420, 57.5, 419, 17.5, 385, -56.5, 371, -66.5, 363, -80.5, 373, -107.5, 375, -127.5, 368, -131.5, 365, -147.5, 369, -173.5, 366, -209.5, 356, -221.5, 358, -269.5, 335, -312.5, 308, -365.5, 298, -372.5, 291, -389.5, 275, -395.5, 253, -403.5, 242, -409.5, 229, -407.5, 213, -405.5, 190, -400.5, 179, -390.5, 179, -379.5, 186, -374.5, 207, -369.5, 203, -359.5, 200, -349.5, 192, -349.5, 178, -352.5, 175, -357.5, 155, -364.5, 94, -372.5, 61, -364.5, -70, -363.5, -96, -359.5, -147, -333.5, -180, -339.5, -207, -326.5, -221, -312.5, -262, -294.5, -276, -277.5, -280, -243.5)
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=677752028]
+position = Vector2(333, 297)
+scale = Vector2(4.15625, 3.6953125)
+texture = ExtResource("1_6taap")
+
+[node name="DogieScene" type="CharacterBody2D" parent="." unique_id=102217457]
+position = Vector2(337, 181)
+script = SubResource("GDScript_11bkg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DogieScene" unique_id=202358476]
+shape = SubResource("RectangleShape2D_qw12k")
+
+[node name="Sprite2D" type="Sprite2D" parent="DogieScene" unique_id=1792008759]
+texture = ExtResource("1_m4ecr")
